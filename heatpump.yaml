@@ -1,0 +1,43 @@
+esphome:
+  name: heatpump
+  platform: ESP8266
+  board: nodemcuv2
+
+  includes:
+    - carrier.h
+
+wifi:
+  ssid: !secret ssid
+  password: !secret password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+remote_transmitter:
+  pin: D5
+  carrier_duty_percent: 50%
+
+sensor:
+- platform: custom
+  lambda: |-
+    auto my_sensor = new CarrierClimate();
+    App.register_component(my_sensor);
+    return {my_sensor};
+
+  sensors:
+    name: "My Custom Sensor"  
+
+climate:
+- platform: custom
+  lambda: |-
+    auto my_custom_climate = new CarrierClimate();
+    App.register_component(my_custom_climate);
+    return {my_custom_climate};
+
+  climates:
+    - name: "My Custom Climate"    
